@@ -1,5 +1,6 @@
 package com.tonia.springbootmall.rollmapper;
 
+import com.tonia.springbootmall.constant.ProductCategory;
 import com.tonia.springbootmall.model.Product;
 import org.springframework.jdbc.core.RowMapper;
 
@@ -14,7 +15,12 @@ public class ProductRollMapper implements RowMapper {
         Product product = new Product();
         product.setProductId(resultSet.getInt("product_id"));
         product.setProductName(resultSet.getString("product_name"));
-        product.setCategory(resultSet.getString("category"));
+        // product.setCategory(resultSet.getString("category"));
+        String categoryStr = resultSet.getString("category");
+        ProductCategory category = ProductCategory.valueOf(categoryStr);
+        product.setCategory(category);
+        // product.setCategory(ProductCategory.valueOf(categoryStr))
+
         product.setImageUrl(resultSet.getString("image_url"));
         product.setPrice(resultSet.getInt("price"));
         product.setStock(resultSet.getInt("stock"));
