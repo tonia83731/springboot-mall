@@ -8,6 +8,8 @@ import com.tonia.springbootmall.service.ProductService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import java.util.List;
+
 @Component
 public class ProductServiceImpl implements ProductService {
 
@@ -17,6 +19,10 @@ public class ProductServiceImpl implements ProductService {
     @Override
     public Product getProductById(Integer productId) {
         return productDao.getProductById(productId);
+    }
+    @Override
+    public List<Product> getProducts() {
+        return productDao.getProducts();
     }
 
     @Override
@@ -33,4 +39,5 @@ public class ProductServiceImpl implements ProductService {
     public void deleteProductById(Integer productId) {
         productDao.deleteProductById(productId);
     }
+
 }
