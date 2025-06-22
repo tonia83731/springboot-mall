@@ -1,5 +1,6 @@
 package com.tonia.springbootmall.controller;
 
+import com.tonia.springbootmall.constant.ProductCategory;
 import com.tonia.springbootmall.dto.ProductRequest;
 import com.tonia.springbootmall.model.Product;
 import com.tonia.springbootmall.service.ProductService;
@@ -26,6 +27,17 @@ public class ProductController {
         }
     }
 
+    @GetMapping("/products")
+    // filtering, sorting, pagination
+    public ResponseEntity<List<Product>> getProducts(
+            @RequestParam(required = false) ProductCategory category,
+            @RequestParam(required = false) String search
+            ){
+        List<Product> productList = productService.getProducts(category, search);
+
+        return ResponseEntity.status(HttpStatus.OK).body(productList);
+    }
+
     @PostMapping("/products")
     public ResponseEntity<Product> createProduct(@RequestBody @Valid ProductRequest productRequest){
         Integer productId = productService.createProduct(productRequest);
@@ -50,13 +62,5 @@ public class ProductController {
     public ResponseEntity<?> deleteProduct(@PathVariable Integer productId){
         productService.deleteProductById(productId);
         return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
-    }
-
-    @GetMapping("/products")
-    // filtering, sorting, pagination
-    public ResponseEntity<List<Product>> getProducts(){
-        List<Product> productList = productService.getProducts();
-
-        return ResponseEntity.status(HttpStatus.OK).body(productList);
     }
 }

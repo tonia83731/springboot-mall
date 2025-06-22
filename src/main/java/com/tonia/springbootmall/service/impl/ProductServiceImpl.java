@@ -1,6 +1,7 @@
 package com.tonia.springbootmall.service.impl;
 
 
+import com.tonia.springbootmall.constant.ProductCategory;
 import com.tonia.springbootmall.dao.ProductDao;
 import com.tonia.springbootmall.dto.ProductRequest;
 import com.tonia.springbootmall.model.Product;
@@ -21,8 +22,8 @@ public class ProductServiceImpl implements ProductService {
         return productDao.getProductById(productId);
     }
     @Override
-    public List<Product> getProducts() {
-        return productDao.getProducts();
+    public List<Product> getProducts(ProductCategory category, String search) {
+        return productDao.getProducts(category, search);
     }
 
     @Override
