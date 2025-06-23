@@ -5,6 +5,7 @@ import com.tonia.springbootmall.dto.ProductQueryParams;
 import com.tonia.springbootmall.dto.ProductRequest;
 import com.tonia.springbootmall.model.Product;
 import com.tonia.springbootmall.service.ProductService;
+import com.tonia.springbootmall.util.Page;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.Min;
@@ -34,7 +35,7 @@ public class ProductController {
 
     @GetMapping("/products")
     // filtering, sorting, pagination
-    public ResponseEntity<List<Product>> getProducts(
+    public ResponseEntity<Page<Product>> getProducts(
             @RequestParam(required = false) ProductCategory category,
             @RequestParam(required = false) String search,
             @RequestParam(defaultValue = "created_date") String orderBy, // orderby SQL table
@@ -52,8 +53,15 @@ public class ProductController {
         productQueryParams.setOffset(offset);
 
         List<Product> productList = productService.getProducts(productQueryParams);
+        Integer total = productService.countProducts(productQueryParams);
 
-        return ResponseEntity.status(HttpStatus.OK).body(productList);
+        Page<Product> page = new Page();
+        page.setLimit(limit);
+        page.setOffset(offset);
+        page.setTotal(total);
+        page.setResults(productList);
+
+        return ResponseEntity.status(HttpStatus.OK).body(page);
     }
 
     @PostMapping("/products")
