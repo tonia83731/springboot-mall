@@ -76,6 +76,7 @@ public class ProductController {
     public ResponseEntity<Product> updateProduct(@PathVariable Integer productId,
                                                  @RequestBody @Valid ProductRequest productRequest){
         Product product = productService.getProductById(productId);
+        System.out.println(product);
         if (product == null) return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
 
         productService.updateProduct(productId, productRequest);
