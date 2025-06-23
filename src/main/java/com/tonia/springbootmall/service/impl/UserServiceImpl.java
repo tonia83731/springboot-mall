@@ -10,6 +10,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Component;
 import org.springframework.util.DigestUtils;
 import org.springframework.web.server.ResponseStatusException;
@@ -32,8 +33,10 @@ public class UserServiceImpl implements UserService {
         }
 
         // use MD5 hashed password
-        String password = userRegisterRequest.getPassword();
-        String hashedPassword = DigestUtils.md5DigestAsHex(userRegisterRequest.getPassword().getBytes());
+        // String password = userRegisterRequest.getPassword();
+        // String hashedPassword = DigestUtils.md5DigestAsHex(userRegisterRequest.getPassword().getBytes());
+        BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
+        String hashedPassword = passwordEncoder.encode(userRegisterRequest.getPassword());
         userRegisterRequest.setPassword(hashedPassword);
 
         Integer userId = userDao.createUser(userRegisterRequest);
@@ -49,8 +52,13 @@ public class UserServiceImpl implements UserService {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND);
         }
         // check user password
-        String hashedPassword = DigestUtils.md5DigestAsHex(userLoginRequest.getPassword().getBytes());
-        if (!user.getPassword().equals(hashedPassword)){
+        // String hashedPassword = DigestUtils.md5DigestAsHex(userLoginRequest.getPassword().getBytes());
+        // if (!user.getPassword().equals(hashedPassword)){
+        //     log.warn("User {} password not match!", userLoginRequest.getEmail());
+        //     throw new ResponseStatusException(HttpStatus.BAD_REQUEST);
+        // }
+        BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
+        if (!passwordEncoder.matches(userLoginRequest.getPassword(),user.getPassword())){
             log.warn("User {} password not match!", userLoginRequest.getEmail());
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST);
         }
