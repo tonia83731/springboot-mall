@@ -4,6 +4,7 @@ import com.tonia.springbootmall.dao.OrderDao;
 import com.tonia.springbootmall.dao.ProductDao;
 import com.tonia.springbootmall.dto.BuyItem;
 import com.tonia.springbootmall.dto.CreateOrderRequest;
+import com.tonia.springbootmall.model.Order;
 import com.tonia.springbootmall.model.OrderItem;
 import com.tonia.springbootmall.model.Product;
 import com.tonia.springbootmall.service.OrderService;
@@ -20,6 +21,15 @@ public class OrderServiceImpl implements OrderService {
     private OrderDao orderDao;
     @Autowired
     private ProductDao productDao;
+
+    @Override
+    @Transactional
+    public Order getOrderById(Integer orderId) {
+        Order order = orderDao.getOrderById(orderId);
+        List<OrderItem> orderItems = orderDao.getOrderItemsByOrderId(orderId);
+        order.setOrderItemList(orderItems);
+        return order;
+    }
 
     @Override
     @Transactional

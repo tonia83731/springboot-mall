@@ -3,6 +3,7 @@ package com.tonia.springbootmall.model;
 import org.springframework.validation.annotation.Validated;
 
 import java.util.Date;
+import java.util.List;
 
 public class Order {
     Integer orderId;
@@ -10,6 +11,8 @@ public class Order {
     Integer totalAmount;
     Date createdDate;
     Date lastModifiedDate;
+
+    List<OrderItem> orderItemList;
 
     public Integer getOrderId() {
         return orderId;
@@ -49,5 +52,13 @@ public class Order {
 
     public void setLastModifiedDate(Date lastModifiedDate) {
         this.lastModifiedDate = lastModifiedDate;
+    }
+
+    public List<OrderItem> getOrderItemList() {
+        return orderItemList;
+    }
+
+    public void setOrderItemList(List<OrderItem> orderItemList) {
+        this.orderItemList = orderItemList;
     }
 }
