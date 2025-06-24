@@ -5,6 +5,7 @@ import com.tonia.springbootmall.dao.ProductDao;
 import com.tonia.springbootmall.dao.UserDao;
 import com.tonia.springbootmall.dto.BuyItem;
 import com.tonia.springbootmall.dto.CreateOrderRequest;
+import com.tonia.springbootmall.dto.OrderQueryParams;
 import com.tonia.springbootmall.model.Order;
 import com.tonia.springbootmall.model.OrderItem;
 import com.tonia.springbootmall.model.Product;
@@ -38,6 +39,22 @@ public class OrderServiceImpl implements OrderService {
         List<OrderItem> orderItems = orderDao.getOrderItemsByOrderId(orderId);
         order.setOrderItemList(orderItems);
         return order;
+    }
+
+    @Override
+    public List<Order> getOrders(OrderQueryParams orderQueryParams) {
+        List<Order> orderList = orderDao.getOrders(orderQueryParams);
+
+        for (Order order : orderList) {
+            List<OrderItem> orderItems = orderDao.getOrderItemsByOrderId(order.getOrderId());
+            order.setOrderItemList(orderItems);
+        }
+        return orderList;
+    }
+
+    @Override
+    public Integer countOrder(OrderQueryParams orderQueryParams) {
+        return orderDao.countOrder(orderQueryParams);
     }
 
     @Override
